@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start:dev": "tsx --env-file=.env --watch  src/index.ts",
+    "init-db": "tsx scripts/init-db.ts",
     "start:prod": "node --env-file .env dist/index.js",
     "build": "tsc",
     "type-check": "tsc --noEmit",
@@ -23,7 +24,8 @@
     "chalk": "^5.4.1",
     "express": "^5.1.0",
     "morgan": "^1.10.0",
-    "pg": "^8.16.0"
+    "pg": "^8.16.0",
+    "dotenv": "^16.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.26.0",
