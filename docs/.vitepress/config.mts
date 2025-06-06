@@ -67,7 +67,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: "github", link: "https://github.com/TockePie/db_labs" },
+      { icon: "github", link: "https://github.com/Vitvor-ua/db_labs" },
     ],
   },
 
