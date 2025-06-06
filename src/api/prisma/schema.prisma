@@ -15,15 +15,15 @@ datasource db {
 }
 
 model Quiz {
-  id        String     @id @unique @default(uuid())
+  id        String     @id @unique @default(uuid()) @db.Uuid
   questions Question[]
 }
 
 model Question {
-  id          String  @id @unique @default(uuid())
+  id          String  @id @unique @default(uuid()) @db.Uuid
   header      String  @db.VarChar(255)
   description String? @db.Text
-  quiz_id     String
+  quiz_id     String  @db.Uuid
 
   quiz  Quiz   @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
   types Type[]
@@ -31,15 +31,15 @@ model Question {
 }
 
 model Type {
-  id          String  @id @unique @default(uuid())
+  id          String  @id @unique @default(uuid()) @db.Uuid
   description String? @db.Text
-  question_id String
+  question_id String @db.Uuid
 
   question Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
 }
 model Variant {
-  id          String  @id @unique @default(uuid())
-  question_id String
+  id          String  @id @unique @default(uuid()) @db.Uuid
+  question_id String @db.Uuid
   text        String  @db.Text
 
   question     Question    @relation(fields: [question_id], references: [id], onDelete: Cascade)
@@ -47,9 +47,9 @@ model Variant {
 }
 
 model SelectedVar {
-  id         String  @id @unique @default(uuid())
-  variant_id String
-  answer_id  String
+  id         String  @id @unique @default(uuid()) @db.Uuid
+  variant_id String @db.Uuid
+  answer_id  String @db.Uuid
 
   variant Variant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
 }
