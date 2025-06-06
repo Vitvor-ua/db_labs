@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Not needed if lastUpdated is not enabled
-          submodules: false
+          submodules: false # Set to true if you need to fetch submodules
       # - uses: pnpm/action-setup@v3 # Uncomment this block if you're using pnpm
       #   with:
       #     version: 9 # Not needed if you've set "packageManager" in package.json
@@ -50,9 +50,6 @@ jobs:
           path: docs/.vitepress/dist
 
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     needs: build
     runs-on: ubuntu-latest
     name: Deploy
