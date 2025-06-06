@@ -21,42 +21,30 @@ npm run start:dev
 
 ## Перевірка працездатности сервісів
 
-### GET: отримати всі запитання
+### GET: отримаємо всі запитання
 
-![alt text](1.png)
+![alt text](1.jpg)
 
-### GET: отримати конкретне запитання
+### POST: cтворюємо новий Variant для цього питання
 
-![alt text](2.png)
+![alt text](2.jpg)
 
-### POST: створити запитання
+### GET: перевіряємо створений Variant
 
-![alt text](3.png)
+![alt text](3.jpg)
 
-### PUT: оновити запитання
+### GET: перевіряємо створений Variant за його id
 
-![alt text](4.png)
+![alt text](4.jpg)
 
-### DELETE: вилучити запитання
+### PUT: оновлюємо цей Variant
 
-![alt text](5.png)
+![alt text](5.jpg)
 
-### GET: отримати всі типи запитаннь
+### DELETE: видалити цей Variant
 
-![alt text](6.png)
+![alt text](6.jpg)
 
-### GET: отримати конкретний тип запитання
+### GET: переконатися що Variant дійсно видалений 
 
-![alt text](7.png)
-
-### POST: створити тип запитання
-
-![alt text](8.png)
-
-### PUT: оновити тип запитання
-
-![alt text](9.png)
-
-### DELETE: вилучити тип запитання
-
-![alt text](10.png)
+![alt text](7.jpg)
