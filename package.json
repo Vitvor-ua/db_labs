@@ -4,23 +4,27 @@
   "version": "2.1.0",
   "main": "index.js",
   "description": "Databases labs template",
-  "repository": "https://github.com/boldak/dis-edu",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vitvor-ua/db_labs.git"
+  },
   "author": "Andrey Boldak <boldak.andrey@gmail.com>",
   "license": "ECL 2.0",
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "init-db": "tsx scripts/init-db.ts"
+    "init-db": "tsx scripts/init-db.ts",
+    "deploy": "vitepress build docs && gh-pages -d docs/.vitepress/dist"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
+    "gh-pages": "^6.3.0",
     "tsx": "^4.19.4",
     "vitepress": "^1.6.3"
   },
   "dependencies": {
     "dotenv": "^16.5.0",
-    "gh-pages": "^6.3.0",
     "markdown-it": "^14.1.0",
     "markdown-it-admonition": "^1.0.4",
     "markdown-it-katex": "^2.0.3",
