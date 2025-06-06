@@ -10,17 +10,22 @@
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "init-db": "tsx scripts/init-db.ts"
   },
   "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "tsx": "^4.19.4",
     "vitepress": "^1.6.3"
   },
   "dependencies": {
+    "dotenv": "^16.5.0",
     "gh-pages": "^6.3.0",
     "markdown-it": "^14.1.0",
     "markdown-it-admonition": "^1.0.4",
     "markdown-it-katex": "^2.0.3",
     "markdown-it-plantuml": "^1.4.1",
-    "markdown-it-task-lists": "^2.1.1"
+    "markdown-it-task-lists": "^2.1.1",
+    "pg": "^8.16.0"
   }
 }
