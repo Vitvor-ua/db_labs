@@ -27,6 +27,7 @@ model Question {
 
   quiz  Quiz   @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
   types Type[]
+  variants Variant[] // Added reverse relation for Variant.question
 }
 
 model Type {
