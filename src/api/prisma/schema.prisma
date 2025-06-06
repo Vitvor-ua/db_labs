@@ -36,3 +36,19 @@ model Type {
 
   question Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
 }
+model Variant {
+  id          String  @id @unique @default(uuid())
+  question_id String
+  text        String  @db.Text
+
+  question     Question    @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  selectedVars SelectedVar[]
+}
+
+model SelectedVar {
+  id         String  @id @unique @default(uuid())
+  variant_id String
+  answer_id  String
+
+  variant Variant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+}
