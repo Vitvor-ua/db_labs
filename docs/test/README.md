@@ -10,13 +10,13 @@ outline: deep
 ### 1. Встановити залежнсті проекту
 
 ```bash
-yarn
+npm install
 ```
 
 ### 2. Запустити сервер
 
 ```bash
-yarn run start:dev
+npm run start:dev
 ```
 
 ## Перевірка працездатности сервісів

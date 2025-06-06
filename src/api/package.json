@@ -10,7 +10,8 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "start": "node --env-file .env dist/index.js"
   },
   "imports": {
     "#*": "./src/*",
@@ -37,5 +38,5 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.0"
   },
-  "packageManager": "yarn@4.9.1"
+  "packageManager": "npm@11.4.1"
 }
