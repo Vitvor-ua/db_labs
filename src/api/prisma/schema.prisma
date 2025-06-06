@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Prisma schema
 
 generator client {
   provider = "prisma-client-js"
@@ -14,32 +10,80 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Survey {
+  id        String     @id @default(uuid()) @db.Uuid
+  feedbacks Feedback[]
+}
+
+model User {
+  id           String  @id @default(uuid()) @db.Uuid
+  first_name   String  @db.VarChar(255)
+  last_name    String  @db.VarChar(255)
+  email        String  @unique @db.VarChar(255)
+  password     String  @db.VarChar(255)
+  phone_number String? @db.VarChar(20)
+  age          Int?    @db.SmallInt
+
+  quizzes         Quiz[]
+  workflowEvents  WorkflowEvent[] @relation("initiator")
+  eventParticipants EventParticipant[]
+  answers         Answer[]
+  feedbacks       Feedback[]
+  roles           user_roles[]
+}
+
+model Role {
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String       @db.VarChar(255)
+  description String?      @db.Text
+  users       user_roles[]
+  permissions role_permissions[]
+}
+
+model Permission {
+  id          String          @id @default(uuid()) @db.Uuid
+  name        String          @db.VarChar(255)
+  description String?         @db.Text
+  roles       role_permissions[]
+}
+
 model Quiz {
-  id        String     @id @unique @default(uuid()) @db.Uuid
-  questions Question[]
+  id            String          @id @default(uuid()) @db.Uuid
+  title         String          @db.VarChar(255)
+  description   String?         @db.Text
+  creation_date DateTime        @default(now()) @db.Timestamp(6)
+  close_date    DateTime?       @db.Timestamp(6)
+  is_active     Boolean         @default(true)
+  owner_id      String          @db.Uuid
+
+  owner          User          @relation(fields: [owner_id], references: [id], onDelete: Cascade)
+  questions      Question[]
+  workflowEvents WorkflowEvent[]
 }
 
 model Question {
-  id          String  @id @unique @default(uuid()) @db.Uuid
+  id          String  @id @default(uuid()) @db.Uuid
   header      String  @db.VarChar(255)
   description String? @db.Text
   quiz_id     String  @db.Uuid
 
-  quiz  Quiz   @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
-  types Type[]
-  variants Variant[] // Added reverse relation for Variant.question
+  quiz        Quiz      @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
+  types       Type[]
+  variants    Variant[]
+  answers     Answer[]
 }
 
 model Type {
-  id          String  @id @unique @default(uuid()) @db.Uuid
+  id          String  @id @default(uuid()) @db.Uuid
   description String? @db.Text
-  question_id String @db.Uuid
+  question_id String  @db.Uuid
 
   question Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
 }
+
 model Variant {
-  id          String  @id @unique @default(uuid()) @db.Uuid
-  question_id String @db.Uuid
+  id          String  @id @default(uuid()) @db.Uuid
+  question_id String  @db.Uuid
   text        String  @db.Text
 
   question     Question    @relation(fields: [question_id], references: [id], onDelete: Cascade)
@@ -47,9 +91,88 @@ model Variant {
 }
 
 model SelectedVar {
-  id         String  @id @unique @default(uuid()) @db.Uuid
-  variant_id String @db.Uuid
-  answer_id  String @db.Uuid
+  id         String  @id @default(uuid()) @db.Uuid
+  variant_id String  @db.Uuid
+  answer_id  String  @db.Uuid
 
   variant Variant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  answer  Answer  @relation(fields: [answer_id], references: [id], onDelete: Cascade)
+}
+
+model Answer {
+  id          String   @id @default(uuid()) @db.Uuid
+  content     String   @db.Text
+  user_id     String   @db.Uuid
+  question_id String   @db.Uuid
+  answer_id   String?  @db.Uuid
+
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  question  Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  parent    Answer?  @relation("AnswerToAnswer", fields: [answer_id], references: [id])
+  children  Answer[] @relation("AnswerToAnswer")
+  selectedVars SelectedVar[]
+  results   Result[]
+}
+
+model WorkflowEvent {
+  id          String    @id @default(uuid()) @db.Uuid
+  datetime    DateTime  @default(now()) @db.Timestamp(6)
+  state       String    @db.Text
+  description String?   @db.Text
+  initiator_id String   @db.Uuid
+  quiz_id      String   @db.Uuid
+
+  initiator   User            @relation("initiator", fields: [initiator_id], references: [id], onDelete: Cascade)
+  quiz        Quiz            @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
+  participants EventParticipant[]
+}
+
+model EventParticipant {
+  id       String   @id @default(uuid()) @db.Uuid
+  role     String   @db.Text
+  user_id  String   @db.Uuid
+  event_id String   @db.Uuid
+
+  user  User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  event WorkflowEvent @relation(fields: [event_id], references: [id], onDelete: Cascade)
+}
+
+model Result {
+  id        String  @id @default(uuid()) @db.Uuid
+  content   String  @db.Text
+  name      String  @db.VarChar(255)
+  answer_id String  @db.Uuid
+
+  answer Answer @relation(fields: [answer_id], references: [id])
+}
+
+model Feedback {
+  id          String   @id @default(uuid()) @db.Uuid
+  description String   @db.Text
+  date        DateTime @default(now()) @db.Timestamp(6)
+  user_id     String   @db.Uuid
+  survey_id   String?
+
+  user   User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  survey Survey? @relation(fields: [survey_id], references: [id])
+}
+
+model user_roles {
+  user_id String
+  role_id String
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [role_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, role_id])
+}
+
+model role_permissions {
+  role_id       String
+  permission_id String
+
+  role       Role       @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permission_id], references: [id], onDelete: Cascade)
+
+  @@id([role_id, permission_id])
 }
